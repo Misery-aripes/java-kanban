@@ -7,56 +7,88 @@ public class Main {
     }
 
     private static void testTask() {
-        TaskKeeper taskKeeper = new TaskKeeper();
+        TaskManager taskManager = new TaskManager();
 
-        List<Task> taskMap = taskKeeper.getTasks();
-        System.out.println("Таски должны быть пустые: " + taskMap.isEmpty());
+        List<Task> tasks = taskManager.getTasks();
+        System.out.println("Таски должны быть пустые: " + tasks.isEmpty());
+        System.out.println();
 
-        Task task1 = new Task("Имя первой тасик", "Описание первой таски");
-        Task taskCreated = taskKeeper.createTask(task1);
+        Task task1 = new Task("Имя первой таски", "Описание первой таски");
+        Task taskCreated = taskManager.createTask(task1);
         System.out.println("Таска должна содержать id: " + (taskCreated.getId() != null));
-        System.out.println("Список тасок должен содержать созданную таску: " + taskKeeper.getTasks());
+        System.out.println("Список тасок должен содержать созданную таску: " + taskManager.getTasks());
         System.out.println();
 
         Task updateTask1 = new Task(taskCreated.getId(), "Новое имя первой таски",
-                "Новое описание второй таски", TaskStatus.IN_PROGRESS);
-        Task task2Updated = taskKeeper.updateTask(updateTask1);
-        System.out.println("Обновленная таска должна содержать обновленные данные: " + task2Updated);
+                "Новое описание первой таски", TaskStatus.IN_PROGRESS);
+        Task taskUpdated = taskManager.updateTask(updateTask1);
+        System.out.println("Обновленная таска должна содержать обновленные данные: " + taskUpdated);
         System.out.println();
 
-        Task newTask2 = new Task("Имя второй задачи", "Описание второй задачи");
-        Task newTaskCreated = taskKeeper.createTask(newTask2);
+        Task newTask2 = new Task("Имя второй таски", "Описание второй таски");
+        Task newTaskCreated = taskManager.createTask(newTask2);
         System.out.println("Создание новой таски: " + newTaskCreated);
         System.out.println();
 
-        boolean deleteTask = taskKeeper.deleteTaskById(task2Updated.getId());
-        System.out.println("Проверка удаления такски: " + deleteTask);
-        System.out.println("Список : " + taskKeeper.getTasks());
+        boolean deleteTask = taskManager.deleteTaskById(taskUpdated.getId());
+        System.out.println("Проверка удаления таски: " + deleteTask);
+        System.out.println("Список тасок: " + taskManager.getTasks());
         System.out.println();
 
-        Epic epicTask = new Epic("Имя епика", "Описание эпика");
-        Task epicCreated = taskKeeper.createEpic(epicTask);
-        System.out.println("Эпик должен содержать id: " + (taskCreated.getId() != null));
-        System.out.println("Список эпиков должен содержать созданный эпик: " + taskKeeper.getEpic());
+        System.out.println("Список всех тасок перед удалением: " + taskManager.getTasks());
+
+        List<Task> removedTasks = taskManager.deleteAllTasks();
+        System.out.println("Удаленные таски: " + removedTasks);
+        System.out.println("Список тасок после удаления: " + taskManager.getTasks());
+        System.out.println();
+
+        Epic epicTask = new Epic("Имя эпика", "Описание эпика");
+        Epic epicCreated = taskManager.createEpic(epicTask);
+        System.out.println("Эпик должен содержать id: " + (epicCreated.getId() != null));
+        System.out.println("Список эпиков должен содержать созданный эпик: " + taskManager.getEpics());
+        System.out.println();
+
+        Epic epicTask2 = new Epic("Имя второго эпика", "Описание второго эпика");
+        Epic epicCreated2 = taskManager.createEpic(epicTask2);
+        System.out.println("Второй эпик должен содержать id: " + (epicCreated2.getId() != null));
+        System.out.println("Список эпиков должен содержать созданный эпик: " + taskManager.getEpics());
         System.out.println();
 
         Epic updateEpic = new Epic(epicCreated.getId(), "Новое имя первого эпика",
-                "Новое описание второго эпика", TaskStatus.IN_PROGRESS);
-        Task epicUpdated = taskKeeper.updateEpic(updateEpic);
+                "Новое описание первого эпика", TaskStatus.IN_PROGRESS);
+        Epic epicUpdated = taskManager.updateEpic(updateEpic);
         System.out.println("Обновленный эпик должен содержать обновленные данные: " + epicUpdated);
         System.out.println();
 
-        System.out.println("Проверка добавления и удаления сабтаски из эпика: ");
-        Epic createdEpic = taskKeeper.createEpic(new Epic("Имя эпика", "Описание эпика"));
-        Subtask createdSub = taskKeeper.createSubtask(new Subtask("Имя сабтаски", "Описание сабтаски"));
-        Subtask addEpic = taskKeeper.addEpicToSubtask(createdEpic.getId(), createdSub.getId());
-        Epic addDub = taskKeeper.addSubtaskToEpic(addEpic.getId(), createdEpic.getId());
-        taskKeeper.deleteSubTaskFromEpic(createdEpic.getId(), createdSub.getId());
-        taskKeeper.deleteEpicFromSubTask(createdSub.getId());
-        var deletedSub = taskKeeper.deleteSubTaskById(addEpic.getId());
-        System.out.println(deletedSub + "," + addDub);
+        boolean deleteEpic = taskManager.deleteEpicById(epicTask.getId());
+        System.out.println("Проверка удаления эпика: " + deleteEpic);
+        System.out.println("Список эпиков: " + taskManager.getEpics());
+        System.out.println();
 
+        System.out.println("Список всех эпиков перед удалением: " + taskManager.getEpics());
 
+        List<Epic> removedEpic = taskManager.deleteAllEpics();
+        System.out.println("Удаленные эпики: " + removedEpic);
+        System.out.println("Список эпиков после удаления: " + taskManager.getEpics());
+        System.out.println("");
 
+        System.out.println("Проверка добавления и удаления сабтасок из эпика: ");
+        Epic createdEpic = taskManager.createEpic(new Epic("Имя эпика", "Описание эпика"));
+        Subtask createdSub = taskManager.createSubtask(new Subtask("Имя сабтаски", "Описание сабтаски",
+                createdEpic));
+        Subtask createdSub2 = taskManager.createSubtask(new Subtask("Имя второй сабтаски",
+                "Описание второй сабтаски",
+                createdEpic));
+        System.out.println("Сабтаски добавлены к эпику: " + createdEpic.getSubtaskList());
+
+        taskManager.deleteSubTaskById(createdSub.getId());
+        System.out.println("Сабтаска удалена: " + createdEpic.getSubtaskList());
+        System.out.println();
+
+        taskManager.deleteAllSubtasks();
+        System.out.println("Проверка удаления всех сабтасок: " + taskManager.getSubtasks());
+        System.out.println();
+
+        System.out.println("Проверка удаления всех тасков: " + taskManager.deleteAllTasks());
     }
 }
