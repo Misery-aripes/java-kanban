@@ -30,15 +30,15 @@ public class Main {
         System.out.println("Создание новой таски: " + newTaskCreated);
         System.out.println();
 
-        boolean deleteTask = taskManager.deleteTaskById(taskUpdated.getId());
-        System.out.println("Проверка удаления таски: " + deleteTask);
-        System.out.println("Список тасок: " + taskManager.getTasks());
+        System.out.println("Список тасков перед удалением 1 таски: " + taskManager.getTasks());
+
+        taskManager.deleteTaskById(taskUpdated.getId());
+        System.out.println("Список тасок после удаления 1 таски: " + taskManager.getTasks());
         System.out.println();
 
         System.out.println("Список всех тасок перед удалением: " + taskManager.getTasks());
 
-        List<Task> removedTasks = taskManager.deleteAllTasks();
-        System.out.println("Удаленные таски: " + removedTasks);
+        taskManager.deleteAllTasks();
         System.out.println("Список тасок после удаления: " + taskManager.getTasks());
         System.out.println();
 
@@ -60,17 +60,17 @@ public class Main {
         System.out.println("Обновленный эпик должен содержать обновленные данные: " + epicUpdated);
         System.out.println();
 
-        boolean deleteEpic = taskManager.deleteEpicById(epicTask.getId());
-        System.out.println("Проверка удаления эпика: " + deleteEpic);
-        System.out.println("Список эпиков: " + taskManager.getEpics());
+        System.out.println("Список эпиков перед удалением 1 эпика: " + taskManager.getEpics());
+
+        taskManager.deleteEpicById(epicTask.getId());
+        System.out.println("Список эпиков после удаления 1 эпика: " + taskManager.getEpics());
         System.out.println();
 
         System.out.println("Список всех эпиков перед удалением: " + taskManager.getEpics());
 
-        List<Epic> removedEpic = taskManager.deleteAllEpics();
-        System.out.println("Удаленные эпики: " + removedEpic);
+        taskManager.deleteAllEpics();
         System.out.println("Список эпиков после удаления: " + taskManager.getEpics());
-        System.out.println("");
+        System.out.println();
 
         System.out.println("Проверка добавления и удаления сабтасок из эпика: ");
         Epic createdEpic = taskManager.createEpic(new Epic("Имя эпика", "Описание эпика"));
@@ -80,15 +80,15 @@ public class Main {
                 "Описание второй сабтаски",
                 createdEpic));
         System.out.println("Сабтаски добавлены к эпику: " + createdEpic.getSubtaskList());
-
-        taskManager.deleteSubTaskById(createdSub.getId());
-        System.out.println("Сабтаска удалена: " + createdEpic.getSubtaskList());
         System.out.println();
 
+        System.out.println("Список сабтасок перед удалением 1 сабтаски: " + taskManager.getSubtasks());
+        taskManager.deleteSubtaskById(createdSub.getId());
+        System.out.println("Список сабтасок после удаления 1 сабтаски: " + createdEpic.getSubtaskList());
+        System.out.println();
+
+        System.out.println("Список сабтасок перед удалением: " + taskManager.getSubtasks());
         taskManager.deleteAllSubtasks();
-        System.out.println("Проверка удаления всех сабтасок: " + taskManager.getSubtasks());
-        System.out.println();
-
-        System.out.println("Проверка удаления всех тасков: " + taskManager.deleteAllTasks());
+        System.out.println("Список сабтасок после удаления: " + taskManager.getSubtasks());
     }
 }

@@ -33,8 +33,8 @@ public class TaskManager {
         return new ArrayList<>(tasks.values());
     }
 
-    public boolean deleteTaskById(int taskId) {
-        return tasks.remove(taskId) != null;
+    public void deleteTaskById(int taskId) {
+        tasks.remove(taskId);
     }
 
     public Epic createEpic(Epic epic) {
@@ -56,15 +56,13 @@ public class TaskManager {
         return new ArrayList<>(epics.values());
     }
 
-    public boolean deleteEpicById(int epicId) {
+    public void deleteEpicById(int epicId) {
         Epic epic = epics.remove(epicId);
         if (epic != null) {
-            for (Subtask subtask : epic.getSubtaskList()) {
-                subtasks.remove(subtask.getId());
-            }
-            return true;
+        for (Subtask subtask : epic.getSubtaskList()) {
+            subtasks.remove(subtask.getId());
         }
-        return false;
+        }
     }
 
     public Subtask createSubtask(Subtask subtask) {
@@ -82,14 +80,15 @@ public class TaskManager {
         return new ArrayList<>(subtasks.values());
     }
 
-    public Subtask deleteSubTaskById(int subtaskId) {
+    public void deleteSubtaskById(int subtaskId) {
         Subtask subtask = subtasks.remove(subtaskId);
-        if (subtask != null && subtask.getEpic() != null) {
+        if (subtask != null) {
             Epic epic = subtask.getEpic();
-            epic.getSubtaskList().remove(subtask);
-            updateEpicStatus(epic);
+            if (epic != null) {
+                epic.getSubtaskList().remove(subtask);
+                updateEpicStatus(epic);
+            }
         }
-        return subtask;
     }
 
     private void updateEpicStatus(Epic epic) {
@@ -108,27 +107,21 @@ public class TaskManager {
         }
     }
 
-    public List<Epic> deleteAllEpics() {
-        List<Epic> removedEpics = new ArrayList<>(epics.values());
+    public void deleteAllEpics() {
         epics.clear();
         subtasks.clear();
-        return removedEpics;
     }
 
-    public List<Subtask> deleteAllSubtasks() {
-        List<Subtask> removedSubtasks = new ArrayList<>(subtasks.values());
+    public void deleteAllSubtasks() {
         subtasks.clear();
         for (Epic epic : epics.values()) {
             epic.getSubtaskList().clear();
             updateEpicStatus(epic);
         }
-        return removedSubtasks;
     }
 
-    public List<Task> deleteAllTasks() {
-        List<Task> removedTasks = new ArrayList<>(tasks.values());
+    public void deleteAllTasks() {
         tasks.clear();
-        return removedTasks;
     }
 }
 
