@@ -1,6 +1,7 @@
 import java.util.List;
 
 public interface TaskManager {
+
     Task createTask(Task task);
 
     Task updateTask(Task task);
