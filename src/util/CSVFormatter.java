@@ -6,7 +6,9 @@ import java.util.Map;
 
 public class CSVFormatter {
 
-    private CSVFormatter() {}
+    private CSVFormatter() {
+
+    }
 
     public static String getHeader() {
         return "id,type,name,status,description,epic";
