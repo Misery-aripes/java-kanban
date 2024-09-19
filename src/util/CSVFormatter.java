@@ -26,7 +26,7 @@ public class CSVFormatter {
     }
 
     public static Task fromString(String csvLine, Map<Integer, Epic> epicsMap) {
-        String[] fields = csvLine.split(",");
+        var fields = csvLine.split(",");
         int id = Integer.parseInt(fields[0]);
         TaskType type = TaskType.valueOf(fields[1]);
         String name = fields[2];

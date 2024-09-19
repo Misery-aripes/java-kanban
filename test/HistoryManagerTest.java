@@ -1,4 +1,8 @@
+import history.HistoryManager;
+import model.Task;
 import org.junit.jupiter.api.Test;
+import service.Managers;
+
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -7,7 +11,7 @@ public class HistoryManagerTest {
     @Test
     public void add() {
         HistoryManager historyManager = Managers.getDefaultHistory();
-        Task task = new Task("Task", "Description");
+        Task task = new Task("model.Task", "Description");
         task.setId(1);
         historyManager.add(task);
         List<Task> history = historyManager.getHistory();
@@ -18,7 +22,7 @@ public class HistoryManagerTest {
     @Test
     public void remove() {
         HistoryManager historyManager = Managers.getDefaultHistory();
-        Task task = new Task("Task", "Description");
+        Task task = new Task("model.Task", "Description");
         task.setId(1); // Установка ID задачи
         historyManager.add(task);
         historyManager.remove(task.getId());

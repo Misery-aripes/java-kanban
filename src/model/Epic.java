@@ -1,3 +1,5 @@
+package model;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,5 +18,10 @@ public class Epic extends Task {
 
     public List<Subtask> getSubtaskList() {
         return subtaskList;
+    }
+
+    @Override
+    public TaskType getTaskType() {
+        return TaskType.EPIC;
     }
 }

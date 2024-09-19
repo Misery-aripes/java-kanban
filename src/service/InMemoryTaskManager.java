@@ -1,20 +1,22 @@
+package service;
+
+import history.HistoryManager;
+import model.Epic;
+import model.Subtask;
+import model.Task;
+import model.TaskStatus;
+
 import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
-    private final Map<Integer, Task> tasks = new HashMap<>();
-    private final Map<Integer, Subtask> subtasks = new HashMap<>();
-    private final Map<Integer, Epic> epics = new HashMap<>();
-    private final HistoryManager historyManager = Managers.getDefaultHistory();
-
-    private static int nextId = 1;
-
-    private int getNextId() {
-        return nextId++;
-    }
+    protected final Map<Integer, Task> tasks = new HashMap<>();
+    protected final Map<Integer, Subtask> subtasks = new HashMap<>();
+    protected final Map<Integer, Epic> epics = new HashMap<>();
+    protected final HistoryManager historyManager = Managers.getDefaultHistory();
 
     @Override
     public Task createTask(Task task) {
-        task.setId(getNextId());
+        task.setId(Task.getNextId());
         this.tasks.put(task.getId(), task);
         return task;
     }
@@ -51,7 +53,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Epic createEpic(Epic epic) {
-        epic.setId(getNextId());
+        epic.setId(Task.getNextId());
         this.epics.put(epic.getId(), epic);
         return epic;
     }
@@ -94,7 +96,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Subtask createSubtask(Subtask subtask) {
-        subtask.setId(getNextId());
+        subtask.setId(Task.getNextId());
         subtasks.put(subtask.getId(), subtask);
         Epic epic = epics.get(subtask.getEpic().getId());
         if (epic != null) {
@@ -161,7 +163,7 @@ public class InMemoryTaskManager implements TaskManager {
         return historyManager.getHistory();
     }
 
-    private void updateEpicStatus(Epic epic) {
+    protected void updateEpicStatus(Epic epic) {
         boolean allDone = true;
         for (Subtask subtask : epic.getSubtaskList()) {
             if (subtask.getStatus() != TaskStatus.DONE) {

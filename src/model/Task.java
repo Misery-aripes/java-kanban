@@ -1,12 +1,16 @@
+package model;
+
 import java.util.Objects;
 
 public class Task {
+    private static int nextId = 1;
     private Integer id;
     private String name;
     private String description;
     private TaskStatus status;
 
     public Task(String name, String description) {
+        this.id = nextId++;
         this.name = name;
         this.description = description;
         this.status = TaskStatus.NEW;
@@ -17,6 +21,15 @@ public class Task {
         this.name = name;
         this.description = description;
         this.status = status;
+    }
+
+    public Task(int id, String name, String description, TaskStatus status, Epic epic) {
+    }
+
+    public Task(String testTask, String testDescription, TaskStatus taskStatus) {
+        this.name = testTask;
+        this.description = testDescription;
+        this.status = taskStatus;
     }
 
     public Integer getId() {
@@ -51,6 +64,22 @@ public class Task {
         this.status = status;
     }
 
+    public static void resetNextId() {
+        nextId = 1;
+    }
+
+    public static void setNextId(int id) {
+        nextId = id;
+    }
+
+    public static int getNextId() {
+        return nextId;
+    }
+
+    public TaskType getTaskType() {
+        return TaskType.TASK;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -64,7 +93,6 @@ public class Task {
     public int hashCode() {
         return Objects.hash(id, name, description, status);
     }
-
 
     @Override
     public String toString() {

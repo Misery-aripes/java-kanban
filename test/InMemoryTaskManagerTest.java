@@ -1,5 +1,11 @@
+import model.Epic;
+import model.Subtask;
+import model.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import service.Managers;
+import service.TaskManager;
+
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -61,11 +67,11 @@ public class InMemoryTaskManagerTest {
 
     @Test
     public void history() {
-        Task task1 = new Task("Task 1", "Description 1");
+        Task task1 = new Task("model.Task 1", "Description 1");
         taskManager.createTask(task1);
-        Task task2 = new Task("Task 2", "Description 2");
+        Task task2 = new Task("model.Task 2", "Description 2");
         taskManager.createTask(task2);
-        Task task3 = new Task("Task 3", "Description 3");
+        Task task3 = new Task("model.Task 3", "Description 3");
         taskManager.createTask(task3);
 
         taskManager.getTask(task1.getId());
@@ -81,10 +87,10 @@ public class InMemoryTaskManagerTest {
 
     @Test
     public void removeSubtaskUpdatesEpic() {
-        Epic epic = new Epic("Test Epic", "Test Description");
+        Epic epic = new Epic("Test model.Epic", "Test Description");
         taskManager.createEpic(epic);
 
-        Subtask subtask = new Subtask("Test Subtask", "Description", epic);
+        Subtask subtask = new Subtask("Test model.Subtask", "Description", epic);
         taskManager.createSubtask(subtask);
 
         taskManager.deleteSubtaskById(subtask.getId());
