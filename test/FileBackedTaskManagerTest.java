@@ -67,7 +67,6 @@ public class FileBackedTaskManagerTest {
     }
 
     @Test
-    @DisplayName("Создание и загрузка пустого файла")
     public void shouldCreateAndLoadEmptyFile() {
         // Проверяем, что файл пуст
         try {
