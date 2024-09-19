@@ -68,6 +68,7 @@ public class FileBackedTaskManagerTest {
 
     @Test
     public void shouldCreateAndLoadEmptyFile() {
+        // Проверяем, что файл пуст
         try {
             List<String> lines = Files.readAllLines(testFile.toPath());
             assertTrue(lines.isEmpty(), "Файл должен быть пустым при создании");
