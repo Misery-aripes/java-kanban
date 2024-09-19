@@ -27,7 +27,7 @@ public class Subtask extends Task {
     }
 
     public int getEpicId() {
-        return epic.getId(); // Проверка на null перед доступом к getId()
+        return epic.getId();
     }
 
     @Override

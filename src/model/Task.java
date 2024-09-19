@@ -23,9 +23,6 @@ public class Task {
         this.status = status;
     }
 
-    public Task(int id, String name, String description, TaskStatus status, Epic epic) {
-    }
-
     public Task(String testTask, String testDescription, TaskStatus taskStatus) {
         this.name = testTask;
         this.description = testDescription;
@@ -62,10 +59,6 @@ public class Task {
 
     public void setStatus(TaskStatus status) {
         this.status = status;
-    }
-
-    public static void resetNextId() {
-        nextId = 1;
     }
 
     public static void setNextId(int id) {
