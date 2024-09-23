@@ -15,7 +15,7 @@ import java.util.*;
 
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
-    private static File file;
+    private File file;
 
     public FileBackedTaskManager(File file) {
         this.file = file;
@@ -47,7 +47,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         return fileBackedTaskManager;
     }
 
-    protected void save() {
+    private void save() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write(CSVFormatter.getHeader());
             writer.newLine();
