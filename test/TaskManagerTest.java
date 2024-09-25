@@ -1,4 +1,7 @@
 import org.junit.jupiter.api.Test;
+import service.InMemoryTaskManager;
+import service.TaskManager;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TaskManagerTest {
