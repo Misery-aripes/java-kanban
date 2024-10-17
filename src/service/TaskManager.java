@@ -43,4 +43,8 @@ public interface TaskManager {
     void deleteAllTasks();
 
     List<Task> getHistory();
+
+    Subtask updateSubtask(Subtask subtask);
+
+    List<Task> getPrioritizedTasks();
 }
