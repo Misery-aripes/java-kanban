@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
 
-
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private File file;
 
@@ -111,13 +110,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     @Override
     public void deleteEpicById(int epicId) {
-        deleteEpicById(epicId);
+        super.deleteEpicById(epicId);
         save();
     }
 
     @Override
     public void deleteSubtaskById(int subtaskId) {
-        deleteSubtaskById(subtaskId);
+        super.deleteSubtaskById(subtaskId);
         save();
     }
 

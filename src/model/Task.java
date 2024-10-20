@@ -1,6 +1,8 @@
 package model;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
+import java.time.Duration;
 
 public class Task {
     private static int nextId = 1;
@@ -8,6 +10,8 @@ public class Task {
     private String name;
     private String description;
     private TaskStatus status;
+    private Duration duration;
+    private LocalDateTime startTime;
 
     public Task(String name, String description) {
         this.id = nextId++;
@@ -27,6 +31,33 @@ public class Task {
         this.name = testTask;
         this.description = testDescription;
         this.status = taskStatus;
+    }
+
+    public Task(String name, String description, Duration duration, LocalDateTime startTime) {
+        this.id = nextId++;
+        this.name = name;
+        this.description = description;
+        this.status = TaskStatus.NEW;
+        this.duration = duration;
+        this.startTime = startTime;
+    }
+
+    public Task(Integer id, String name, String description, TaskStatus status,
+                Duration duration, LocalDateTime startTime) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.status = status;
+        this.duration = duration;
+        this.startTime = startTime;
+    }
+
+    public Task(String name, String description, TaskStatus status, Duration duration, LocalDateTime startTime) {
+        this.name = name;
+        this.description = description;
+        this.status = status;
+        this.duration = duration;
+        this.startTime = startTime;
     }
 
     public Integer getId() {
@@ -71,6 +102,29 @@ public class Task {
 
     public TaskType getTaskType() {
         return TaskType.TASK;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        if (startTime != null && duration != null) {
+            return startTime.plus(duration);
+        }
+        return null;
     }
 
     @Override
