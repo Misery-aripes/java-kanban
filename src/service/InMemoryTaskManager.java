@@ -1,5 +1,6 @@
 package service;
 
+import exeption.NotFoundException;
 import history.HistoryManager;
 import model.Epic;
 import model.Subtask;
@@ -44,18 +45,20 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteTaskById(int taskId) {
         Task task = tasks.remove(taskId);
-        if (task != null) {
-            removeFromPrioritizedTasks(task);
+        if (task == null) {
+            throw new NotFoundException("Задача с ID " + taskId + " не найдена");
         }
+        removeFromPrioritizedTasks(task);
         historyManager.remove(taskId);
     }
 
     @Override
     public Task getTask(int taskId) {
         Task task = tasks.get(taskId);
-        if (task != null) {
-            historyManager.add(task);
+        if (task == null) {
+            throw new NotFoundException("Задача с ID " + taskId + " не найдена");
         }
+        historyManager.add(task);
         return task;
     }
 
@@ -70,7 +73,7 @@ public class InMemoryTaskManager implements TaskManager {
     public Epic updateEpic(Epic epic) {
         Integer taskId = epic.getId();
         if (taskId == null || !this.epics.containsKey(taskId)) {
-            return null;
+            throw new NotFoundException("Эпик с ID " + taskId + " не найден");
         }
         this.epics.put(taskId, epic);
         return epic;
@@ -85,28 +88,31 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteEpicById(int epicId) {
         Epic epic = epics.get(epicId);
 
-        if (epic != null) {
-            epic.getSubtaskList().stream()
-                    .map(Subtask::getId)
-                    .forEach(subtaskId -> {
-                        Subtask subtask = subtasks.remove(subtaskId);
-                        if (subtask != null) {
-                            removeFromPrioritizedTasks(subtask);
-                            historyManager.remove(subtaskId);
-                        }
-                    });
-
-            epics.remove(epicId);
-            historyManager.remove(epicId);
+        if (epic == null) {
+            throw new NotFoundException("Эпик с ID " + epicId + " не найден");
         }
+
+        epic.getSubtaskList().stream()
+                .map(Subtask::getId)
+                .forEach(subtaskId -> {
+                    Subtask subtask = subtasks.remove(subtaskId);
+                    if (subtask != null) {
+                        removeFromPrioritizedTasks(subtask);
+                        historyManager.remove(subtaskId);
+                    }
+                });
+
+        epics.remove(epicId);
+        historyManager.remove(epicId);
     }
 
     @Override
     public Epic getEpicById(int epicId) {
         Epic epic = epics.get(epicId);
-        if (epic != null) {
-            historyManager.add(epic);
+        if (epic == null) {
+            throw new NotFoundException("Эпик с ID " + epicId + " не найден");
         }
+        historyManager.add(epic);
         return epic;
     }
 
@@ -146,14 +152,15 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteSubtaskById(int subtaskId) {
         Subtask subtask = subtasks.remove(subtaskId);
-        if (subtask != null) {
-            removeFromPrioritizedTasks(subtask);
+        if (subtask == null) {
+            throw new NotFoundException("Подзадача с ID " + subtaskId + " не найдена");
+        }
+        removeFromPrioritizedTasks(subtask);
 
-            Epic epic = subtask.getEpic();
-            if (epic != null) {
-                epic.getSubtaskList().removeIf(s -> s.getId() == subtaskId);
-                updateEpicStatus(epic);
-            }
+        Epic epic = subtask.getEpic();
+        if (epic != null) {
+            epic.getSubtaskList().removeIf(s -> s.getId() == subtaskId);
+            updateEpicStatus(epic);
         }
         historyManager.remove(subtaskId);
     }
@@ -161,9 +168,10 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Subtask getSubtask(int subtaskId) {
         Subtask subtask = subtasks.get(subtaskId);
-        if (subtask != null) {
-            historyManager.add(subtask);
+        if (subtask == null) {
+            throw new NotFoundException("Подзадача с ID " + subtaskId + " не найдена");
         }
+        historyManager.add(subtask);
         return subtask;
     }
 
