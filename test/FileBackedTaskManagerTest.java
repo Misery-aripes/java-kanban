@@ -1,3 +1,4 @@
+import exeption.NotFoundException;
 import model.Epic;
 import model.Subtask;
 import model.Task;
@@ -72,14 +73,23 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
     @Test
     public void shouldDeleteTask() {
         taskManager.deleteTaskById(task.getId());
-        assertNull(taskManager.getTask(task.getId()), "Задача не была удалена");
+
+        Exception exception = assertThrows(NotFoundException.class, () -> {
+            taskManager.getTask(task.getId());
+        });
+        assertEquals("Задача с ID " + task.getId() + " не найдена.", exception.getMessage());
     }
 
     @Override
     @Test
     public void shouldDeleteEpic() {
         taskManager.deleteEpicById(epic.getId());
-        assertNull(taskManager.getEpicById(epic.getId()), "Эпик не был удален");
+
+        Exception exception = assertThrows(NotFoundException.class, () -> {
+            taskManager.getEpicById(epic.getId());
+        });
+        assertEquals("Эпик с ID " + epic.getId() + " не найден.", exception.getMessage());
+
         assertTrue(taskManager.getSubtasks().isEmpty(), "Связанные подзадачи не были удалены");
     }
 
@@ -88,6 +98,10 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
     @Test
     public void shouldDeleteSubTask() {
         taskManager.deleteSubtaskById(subTask.getId());
-        assertNull(taskManager.getSubtask(subTask.getId()), "Подзадача не была удалена");
+
+        Exception exception = assertThrows(NotFoundException.class, () -> {
+            taskManager.getSubtask(subTask.getId());
+        });
+        assertEquals("Подзадача с ID " + subTask.getId() + " не найдена.", exception.getMessage());
     }
 }

@@ -29,9 +29,10 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task updateTask(Task task) {
         Task existingTask = tasks.get(task.getId());
-        if (existingTask != null) {
-            removeFromPrioritizedTasks(existingTask);
+        if (existingTask == null) {
+            throw new NotFoundException("Задача с ID " + task.getId() + " не найдена.");
         }
+        removeFromPrioritizedTasks(existingTask);
         addToPrioritizedTasks(task);
         tasks.put(task.getId(), task);
         return task;
@@ -46,7 +47,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteTaskById(int taskId) {
         Task task = tasks.remove(taskId);
         if (task == null) {
-            throw new NotFoundException("Задача с ID " + taskId + " не найдена");
+            throw new NotFoundException("Задача с ID " + taskId + " не найдена.");
         }
         removeFromPrioritizedTasks(task);
         historyManager.remove(taskId);
@@ -56,7 +57,7 @@ public class InMemoryTaskManager implements TaskManager {
     public Task getTask(int taskId) {
         Task task = tasks.get(taskId);
         if (task == null) {
-            throw new NotFoundException("Задача с ID " + taskId + " не найдена");
+            throw new NotFoundException("Задача с ID " + taskId + " не найдена.");
         }
         historyManager.add(task);
         return task;
@@ -72,10 +73,10 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Epic updateEpic(Epic epic) {
         Integer taskId = epic.getId();
-        if (taskId == null || !this.epics.containsKey(taskId)) {
-            throw new NotFoundException("Эпик с ID " + taskId + " не найден");
+        if (taskId == null || !epics.containsKey(taskId)) {
+            throw new NotFoundException("Эпик с ID " + taskId + " не найден.");
         }
-        this.epics.put(taskId, epic);
+        epics.put(taskId, epic);
         return epic;
     }
 
@@ -86,10 +87,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteEpicById(int epicId) {
-        Epic epic = epics.get(epicId);
-
+        Epic epic = epics.remove(epicId);
         if (epic == null) {
-            throw new NotFoundException("Эпик с ID " + epicId + " не найден");
+            throw new NotFoundException("Эпик с ID " + epicId + " не найден.");
         }
 
         epic.getSubtaskList().stream()
@@ -102,7 +102,6 @@ public class InMemoryTaskManager implements TaskManager {
                     }
                 });
 
-        epics.remove(epicId);
         historyManager.remove(epicId);
     }
 
@@ -110,7 +109,7 @@ public class InMemoryTaskManager implements TaskManager {
     public Epic getEpicById(int epicId) {
         Epic epic = epics.get(epicId);
         if (epic == null) {
-            throw new NotFoundException("Эпик с ID " + epicId + " не найден");
+            throw new NotFoundException("Эпик с ID " + epicId + " не найден.");
         }
         historyManager.add(epic);
         return epic;
@@ -122,25 +121,28 @@ public class InMemoryTaskManager implements TaskManager {
         addToPrioritizedTasks(subtask);
         subtasks.put(subtask.getId(), subtask);
         Epic epic = epics.get(subtask.getEpic().getId());
-        if (epic != null) {
-            epic.getSubtaskList().add(subtask);
-            updateEpicStatus(epic);
+        if (epic == null) {
+            throw new NotFoundException("Эпик с ID " + subtask.getEpic().getId() + " не найден.");
         }
+        epic.getSubtaskList().add(subtask);
+        updateEpicStatus(epic);
         return subtask;
     }
 
     @Override
     public Subtask updateSubtask(Subtask subtask) {
         Subtask existingSubtask = subtasks.get(subtask.getId());
-        if (existingSubtask != null) {
-            removeFromPrioritizedTasks(existingSubtask);
+        if (existingSubtask == null) {
+            throw new NotFoundException("Подзадача с ID " + subtask.getId() + " не найдена.");
         }
+        removeFromPrioritizedTasks(existingSubtask);
         addToPrioritizedTasks(subtask);
         subtasks.put(subtask.getId(), subtask);
         Epic epic = epics.get(subtask.getEpic().getId());
-        if (epic != null) {
-            updateEpicStatus(epic);
+        if (epic == null) {
+            throw new NotFoundException("Эпик с ID " + subtask.getEpic().getId() + " не найден.");
         }
+        updateEpicStatus(epic);
         return subtask;
     }
 
@@ -153,7 +155,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteSubtaskById(int subtaskId) {
         Subtask subtask = subtasks.remove(subtaskId);
         if (subtask == null) {
-            throw new NotFoundException("Подзадача с ID " + subtaskId + " не найдена");
+            throw new NotFoundException("Подзадача с ID " + subtaskId + " не найдена.");
         }
         removeFromPrioritizedTasks(subtask);
 
@@ -169,7 +171,7 @@ public class InMemoryTaskManager implements TaskManager {
     public Subtask getSubtask(int subtaskId) {
         Subtask subtask = subtasks.get(subtaskId);
         if (subtask == null) {
-            throw new NotFoundException("Подзадача с ID " + subtaskId + " не найдена");
+            throw new NotFoundException("Подзадача с ID " + subtaskId + " не найдена.");
         }
         historyManager.add(subtask);
         return subtask;
