@@ -42,7 +42,7 @@ public class HttpTaskManagerTest {
     }
 
     @Test
-    public void testAddTask() throws IOException, InterruptedException {
+    public void createTask_TaskCreated() throws IOException, InterruptedException {
         Task task = new Task("Test Task", "Testing task creation",
                 TaskStatus.NEW, Duration.ofMinutes(15), LocalDateTime.now());
         String taskJson = gson.toJson(task);
@@ -65,7 +65,7 @@ public class HttpTaskManagerTest {
     }
 
     @Test
-    public void testDeleteTask() throws IOException, InterruptedException {
+    public void deleteTask_TaskDeleted() throws IOException, InterruptedException {
         Task task = new Task("Task to Delete", "Test Task Description",
                 TaskStatus.NEW, Duration.ofMinutes(30), LocalDateTime.now());
         manager.createTask(task);
@@ -84,7 +84,7 @@ public class HttpTaskManagerTest {
     }
 
     @Test
-    public void testGetTasks() throws IOException, InterruptedException {
+    public void getTasks_theTaskHasBeenReceived() throws IOException, InterruptedException {
         Task task = new Task("Existing Task", "Task description",
                 TaskStatus.NEW, Duration.ofMinutes(15), LocalDateTime.now());
         manager.createTask(task);
