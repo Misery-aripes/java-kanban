@@ -12,12 +12,19 @@ public class SubtaskTest {
 
     @Test
     public void shouldCreateSubtask() {
-        Epic epic = new Epic("Test model.Epic", "Test Description");
+        Epic epic = taskManager.createEpic(new Epic("Test model.Epic", "Test Description"));
+
         Subtask subtask = new Subtask("Test model.Subtask", "Test model.Subtask Description", epic);
         Subtask createdSub = taskManager.createSubtask(subtask);
-        assertNotNull(subtask.getId(), "ID подзадачи не должен быть null");
-        assertEquals("Test model.Subtask", subtask.getName(), "Имя подзадачи не совпадает");
-        assertEquals("Test model.Subtask Description", subtask.getDescription(), "Описание подзадачи не совпадает");
-        assertEquals(epic, subtask.getEpic(), "Эпик подзадачи не совпадает");
+
+        assertNotNull(createdSub.getId(), "ID подзадачи не должен быть null");
+
+        Subtask savedSubtask = taskManager.getSubtask(createdSub.getId());
+        assertNotNull(savedSubtask, "Подзадача не была сохранена в менеджере");
+
+        assertEquals("Test model.Subtask", savedSubtask.getName(), "Имя подзадачи не совпадает");
+        assertEquals("Test model.Subtask Description", savedSubtask.getDescription(),
+                "Описание подзадачи не совпадает");
+        assertEquals(epic, savedSubtask.getEpic(), "Эпик подзадачи не совпадает");
     }
 }
